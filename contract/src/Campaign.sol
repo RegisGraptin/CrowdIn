@@ -1,57 +1,61 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract Campaign {
+contract Campaign is ERC20 {
+
+    struct Milestone {
+        uint256 date;
+        string description;
+    }
+
+    string public title;
+    string public description;
+    Milestone[] public milestones;
+
+    uint256 public targetDate;
+    uint256 public targetDonation;
+
     address public owner;
-    IERC20 public donationToken;
-    uint256 public goal;
-    uint256 public deadline;
-    uint256 public totalDonations;
 
-    mapping(address => uint256) public contributions;
 
-    constructor(address _owner, IERC20 _token, uint256 _goal, uint256 _duration) {
+
+    event DonationReceived(address donor, uint256 amount);
+
+    constructor(
+        address _owner,
+        uint256 _targetDate,
+        uint256 _targetDonation,
+        string memory _title,
+        string memory _description,
+        Milestone[] memory _milestones
+    ) ERC20("Campaign#1", "CMP") {
         owner = _owner;
-        donationToken = _token;
-        goal = _goal;
-        deadline = block.timestamp + _duration;
+        targetDate = _targetDate;
+        targetDonation = _targetDonation;
+        title = _title;
+        description = _description;
+
+        for (uint256 i = 0; i < _milestones.length; i++) {
+            milestones.push(
+                Milestone({
+                    date: _milestones[i].date,
+                    description: _milestones[i].description
+                })
+            );
+        }   
     }
 
-    // Accept donations
-    function donate(uint256 _amount) external {
-        require(block.timestamp < deadline, "Campaign ended");
-        require(_amount > 0, "Invalid amount");
+    // Accept dontion with native token
+    receive() external payable {
+        require(block.timestamp < targetDate, "Campaign ended");
+        require(msg.value > 0, "Must send native token");
 
-        // Transfer ERC20 tokens from contributor to this contract
-        donationToken.transferFrom(msg.sender, address(this), _amount);
-        contributions[msg.sender] += _amount;
-        totalDonations += _amount;
+        // Mint corresponding token
+        _mint(msg.sender, msg.value);
+
+        emit DonationReceived(msg.sender, msg.value);
     }
 
-    // Withdraw funds if the goal is reached
-    function withdraw() external {
-        require(msg.sender == owner, "Only owner can withdraw");
-        require(totalDonations >= goal, "Goal not reached");
-
-        donationToken.transfer(owner, totalDonations);
-    }
-
-    // Refund contributors if the campaign fails
-    function refund() external {
-        require(block.timestamp >= deadline, "Campaign still active");
-        require(totalDonations < goal, "Goal reached");
-
-        uint256 amount = contributions[msg.sender];
-        require(amount > 0, "No contributions");
-
-        contributions[msg.sender] = 0;
-        donationToken.transfer(msg.sender, amount);
-    }
-
-    // View contribution
-    function getContribution(address _contributor) external view returns (uint256) {
-        return contributions[_contributor];
-    }
 }
