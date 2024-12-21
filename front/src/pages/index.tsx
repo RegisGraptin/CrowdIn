@@ -18,7 +18,7 @@ const Home: NextPage = () => {
 
       <Header />
 
-      <main className="container">
+      <main>
         <Campaigns />
       </main>
     </div>
