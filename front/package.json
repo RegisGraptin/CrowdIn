@@ -11,7 +11,10 @@
     "@material-tailwind/react": "^2.1.10",
     "@rainbow-me/rainbowkit": "^2.2.1",
     "@tanstack/react-query": "^5.55.3",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
     "next": "^14.2.10",
+    "prettier-eslint": "^16.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "viem": "2.17.0",
@@ -22,7 +25,8 @@
     "@types/react": "^18.3.5",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
+    "prettier": "3.4.2",
     "tailwindcss": "^3.4.16",
-    "typescript": "5.5.2"
+    "typescript": "4.9.5"
   }
 }

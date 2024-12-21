@@ -1,12 +1,12 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-import Example from '../components/Example';
+import type { NextPage } from "next";
+import Head from "next/head";
+
+import Campaigns from "../components/Campaigns";
+import { Header } from "../components/Header";
 
 const Home: NextPage = () => {
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>RainbowKit App</title>
         <meta
@@ -16,16 +16,11 @@ const Home: NextPage = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <main className={styles.main}>
-        <ConnectButton />
-        <Example />
-      </main>
+      <Header />
 
-      <footer className={styles.footer}>
-        <a href="https://rainbow.me" rel="noopener noreferrer" target="_blank">
-          Made with ❤️ by your frens at 🌈
-        </a>
-      </footer>
+      <main className="container">
+        <Campaigns />
+      </main>
     </div>
   );
 };
