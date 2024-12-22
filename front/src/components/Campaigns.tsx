@@ -44,8 +44,7 @@ export default function Campaigns() {
                   <CampaignContainer
                     key={index}
                     index={index}
-                    key
-                    campaign={campaign.result}
+                    campaign={campaign.result as string[]}
                   />
                 );
               })}

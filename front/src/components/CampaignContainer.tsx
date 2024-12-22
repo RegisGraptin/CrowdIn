@@ -6,8 +6,15 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
+import Link from "next/link";
 
-export default function CampaignContainer({ index, campaign }) {
+export default function CampaignContainer({
+  index,
+  campaign,
+}: {
+  index: number;
+  campaign: string[];
+}) {
   console.log(campaign);
 
   return (
@@ -26,7 +33,9 @@ export default function CampaignContainer({ index, campaign }) {
           <Typography>{campaign[1].substring(0, 500)}</Typography>
         </CardBody>
         <CardFooter className="pt-0">
-          <Button>Learn More</Button>
+          <Link href={"/campaign/" + (index + 1)} title={campaign[0]}>
+            <Button>Learn More</Button>
+          </Link>
         </CardFooter>
       </Card>
     </>
