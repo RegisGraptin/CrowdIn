@@ -5,17 +5,31 @@ import {
   CardFooter,
   Typography,
   Button,
+  Progress,
 } from "@material-tailwind/react";
 import Link from "next/link";
 
 export default function CampaignContainer({
   index,
   campaign,
+  detail = false,
+  milestones = [],
+  campaignContribution,
 }: {
   index: number;
   campaign: string[];
+  detail: boolean;
+  milestones: any[];
+  campaignContribution: number;
 }) {
-  console.log(campaign);
+  console.log("Campaign detial:", campaign);
+
+  const showDescription = (content: string) => {
+    if (detail) {
+      return content;
+    }
+    return content.substring(0, 500);
+  };
 
   return (
     <>
@@ -30,13 +44,48 @@ export default function CampaignContainer({
           <Typography variant="h5" color="blue-gray" className="mb-2">
             #{index + 1} - {campaign[0]}
           </Typography>
-          <Typography>{campaign[1].substring(0, 500)}</Typography>
+          <Typography>{showDescription(campaign[1])}</Typography>
         </CardBody>
-        <CardFooter className="pt-0">
-          <Link href={"/campaign/" + (index + 1)} title={campaign[0]}>
-            <Button>Learn More</Button>
-          </Link>
-        </CardFooter>
+        {!detail && (
+          <CardFooter className="pt-0">
+            <Link href={"/campaign/" + (index + 1)} title={campaign[0]}>
+              <Button>Learn More</Button>
+            </Link>
+          </CardFooter>
+        )}
+        {detail && milestones && (
+          <CardFooter className="pt-0">
+            {milestones.map((milestone, index) => {
+              return (
+                <>
+                  <Card
+                    key={index}
+                    className="shadow-sm border border-gray-200 !rounded-lg"
+                  >
+                    <CardBody className="p-4">
+                      <div className="flex justify-between items-center">
+                        <Typography className="!font-medium !text-s text-gray-600">
+                          Milestone #{index + 1}
+                        </Typography>
+                      </div>
+                      <div className="w-full">
+                        <div className="mb-2 flex items-center justify-between gap-4">
+                          <Typography color="blue-gray" variant="h5">
+                            Target {"" + milestone.amount} Neo
+                          </Typography>
+                          <Typography color="blue-gray" variant="h6">
+                            50%
+                          </Typography>
+                        </div>
+                        <Progress value={50} />
+                      </div>
+                    </CardBody>
+                  </Card>
+                </>
+              );
+            })}
+          </CardFooter>
+        )}
       </Card>
     </>
   );
