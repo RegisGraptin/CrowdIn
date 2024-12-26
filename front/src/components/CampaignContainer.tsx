@@ -6,8 +6,10 @@ import {
   Typography,
   Button,
   Progress,
+  Input,
 } from "@material-tailwind/react";
 import Link from "next/link";
+import { useAccount } from "wagmi";
 
 export default function CampaignContainer({
   index,
@@ -23,7 +25,11 @@ export default function CampaignContainer({
   campaignContribution: number;
 }) {
   console.log("Campaign detial:", campaign);
+  console.log("Campaign contribution:", campaignContribution);
 
+
+  const { isConnected } = useAccount()
+  
   const showDescription = (content: string) => {
     if (detail) {
       return content;
@@ -31,21 +37,30 @@ export default function CampaignContainer({
     return content.substring(0, 500);
   };
 
+  let allocation = campaignContribution;
+
   return (
     <>
       <Card className="mt-6">
         <CardHeader color="blue-gray" className="relative h-72">
           <img
-            src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
+            src={`/images/project_${index}.jpg`}
             alt="card-image"
+            className="w-full object-cover object-center"
           />
         </CardHeader>
         <CardBody>
-          <Typography variant="h5" color="blue-gray" className="mb-2">
-            #{index + 1} - {campaign[0]}
-          </Typography>
+          <div className="flex justify-between items-center">
+            <Typography variant="h5" color="blue-gray" className="mb-2">
+              #{index + 1} - {campaign[0]}
+            </Typography>
+            <Typography color="blue-gray" variant="h6">
+              Target {"" + campaign[3]} Neo
+            </Typography>
+          </div>
           <Typography>{showDescription(campaign[1])}</Typography>
         </CardBody>
+
         {!detail && (
           <CardFooter className="pt-0">
             <Link href={"/campaign/" + (index + 1)} title={campaign[0]}>
@@ -53,37 +68,67 @@ export default function CampaignContainer({
             </Link>
           </CardFooter>
         )}
+        
         {detail && milestones && (
           <CardFooter className="pt-0">
-            {milestones.map((milestone, index) => {
-              return (
-                <>
-                  <Card
-                    key={index}
-                    className="shadow-sm border border-gray-200 !rounded-lg"
-                  >
-                    <CardBody className="p-4">
-                      <div className="flex justify-between items-center">
-                        <Typography className="!font-medium !text-s text-gray-600">
-                          Milestone #{index + 1}
-                        </Typography>
-                      </div>
-                      <div className="w-full">
-                        <div className="mb-2 flex items-center justify-between gap-4">
-                          <Typography color="blue-gray" variant="h5">
-                            Target {"" + milestone.amount} Neo
-                          </Typography>
-                          <Typography color="blue-gray" variant="h6">
-                            50%
+            {milestones.map(
+              (milestone, index) => {
+
+                let percent = 0;
+                if (allocation >= milestone.amount) {
+                  percent = 100;
+                  allocation -= milestone.amount;
+                } else if (allocation > 0) {
+                  percent = milestone.amount / allocation;
+                  allocation = 0;
+                } else {
+                  percent = 0;
+                }
+                
+                return(
+                  <>
+                    <Card
+                      key={index}
+                      className="shadow-sm border border-gray-200 !rounded-lg mt-4"
+                    >
+                      <CardBody className="p-4">
+                        <div className="flex justify-between items-center">
+                          <Typography className="!font-medium !text-s text-gray-600">
+                            Milestone #{index + 1}
                           </Typography>
                         </div>
-                        <Progress value={50} />
-                      </div>
-                    </CardBody>
-                  </Card>
-                </>
-              );
-            })}
+                        <div className="w-full">
+                          <div className="mb-2 flex items-center justify-between gap-4">
+                            <Typography color="blue-gray" variant="h5">
+                              Target {"" + milestone.amount} Neo
+                            </Typography>
+                            <Typography color="blue-gray" variant="h6">
+                              {percent}%
+                            </Typography>
+                          </div>
+                          <Progress value={percent} />
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </>,
+                );
+              }
+            )}
+
+            {isConnected && (
+              <div className="mt-4 flex justify-end">
+                <div className="w-72 mr-2">
+                  <Input label="Amount" type="number" crossOrigin={undefined} />
+                </div>
+                <Button>Contribute</Button>
+              </div>
+            )}
+            {!isConnected && (
+              <div className="mt-4 flex justify-end">
+                Connect your wallet to contribute!
+              </div>
+            )}
+            
           </CardFooter>
         )}
       </Card>
