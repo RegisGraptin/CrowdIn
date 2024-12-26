@@ -1,14 +1,13 @@
 import React from "react";
 import {
   Navbar,
-  MobileNav,
   Typography,
-  Button,
   IconButton,
-  Card,
   Collapse,
 } from "@material-tailwind/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+
+import Image from "next/image";
 
 export function Header() {
   const [openNav, setOpenNav] = React.useState(false);
@@ -41,9 +40,16 @@ export function Header() {
         <Typography
           as="a"
           href="/"
-          className="mr-4 cursor-pointer py-1.5 font-medium"
+          className="mr-4 cursor-pointer font-medium flex items-center text-xl"
         >
-          Decentralized Creation
+          <Image
+            width={40}
+            height={40}
+            src="/images/logo.png"
+            alt="CrowdIn logo"
+            className="mr-2"
+          />
+          CrowdIn
         </Typography>
         <div className="flex items-center gap-4">
           <div className="mr-4 hidden lg:block">{navList}</div>

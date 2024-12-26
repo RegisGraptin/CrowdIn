@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 
 import { FormEvent, useCallback, useState } from "react";
-import { Address, BaseError } from "viem";
+import { Address, BaseError, parseEther } from "viem";
 import {
   useAccount,
   useWaitForTransactionReceipt,
@@ -86,7 +86,7 @@ const CreateCampagn: NextPage = () => {
 
       _milestones.push({
         date: milestoneDateFormatted,
-        amount: milestone.amount,
+        amount: parseEther(milestone.amount),
         description: milestone.description,
       });
     });
@@ -105,7 +105,7 @@ const CreateCampagn: NextPage = () => {
       functionName: "createCampaign",
       args: [
         targetDateFormatted,
-        formData.get("targetPrice"),
+        parseEther(formData.get("targetPrice") as string),
         formData.get("title"),
         formData.get("description"),
         _milestones,
@@ -173,6 +173,7 @@ const CreateCampagn: NextPage = () => {
                           name="targetPrice"
                           id="targetPrice"
                           step="any"
+                          min={0}
                           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                           placeholder="1000 Neo"
                         />
@@ -187,7 +188,7 @@ const CreateCampagn: NextPage = () => {
                           milestones.map((milestone, index) => {
                             return (
                               <MilestoneForm
-                                key="index"
+                                key={index}
                                 id={index}
                                 milestone={milestone}
                                 onMilestoneChange={handleMilestoneChange}

@@ -61,7 +61,7 @@ const CampaignDetail: NextPage = () => {
                 campaign={campaign as string[]}
                 detail={true}
                 milestones={milestones as any[]}
-                campaignContribution={campaignContribution}
+                campaignContribution={campaignContribution as number}
               />
             )}
           </div>

@@ -24,17 +24,15 @@ export default function Campaigns() {
     ),
   });
 
-  console.log(campaigns);
-
   return (
     <>
       <section>
         <div className="container mx-auto pt-10">
           <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-center">
-            List of campaigns
+            Ongoing campaigns
           </h1>
 
-          <div className="pt-5">
+          <div className="pt-10 pb-20">
             {campaignsLoading && <p>Loading...</p>}
 
             {!campaignsLoading &&

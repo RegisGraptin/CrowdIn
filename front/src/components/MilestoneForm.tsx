@@ -29,6 +29,7 @@ export default function MilestoneForm({
           type="number"
           step="any"
           value={milestone.amount}
+          min={0}
           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
           onChange={(e) => onMilestoneChange(id, "amount", e.target.value)}
         />
