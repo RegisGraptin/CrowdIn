@@ -18,3 +18,7 @@ Project creators can launch a crowdfunding campaign with the following parameter
 
 Contributions are currently limited to the platform's native token. Funds are locked in the contract and released upon milestone completion. Milestone approval requires contributor consensus (e.g., through voting or quorum mechanisms).
 
+# Contract address
+
+Testnet: 0x314B77f1154441A394C659edA86730832066929f
+Scanner: https://xt4scan.ngd.network/address/0x314B77f1154441A394C659edA86730832066929f
